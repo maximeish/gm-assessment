@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.mapContainer {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    position: static;
+    color: #fff;
+    /* margin-top: 20px; */
+  }
+  .mapContainer > div {
+    margin: 0 0 20px 0;
+  }
+  .btnCont {
+    display: flex;
+    justify-content: center;
+  }
