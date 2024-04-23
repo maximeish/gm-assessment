@@ -1,9 +1,8 @@
 import React from "react";
 import Navigation from "./components/Navigation";
-import Map from './components/Map';
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
-
+import Map from "./components/Map";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   return (

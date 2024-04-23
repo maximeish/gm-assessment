@@ -3,20 +3,48 @@
 @tailwind utilities;
 
 .mapContainer {
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    box-sizing: border-box;
-    flex-shrink: 0;
-    position: static;
-    color: #fff;
-    /* margin-top: 20px; */
-  }
-  .mapContainer > div {
-    margin: 0 0 20px 0;
-  }
-  .btnCont {
-    display: flex;
-    justify-content: center;
-  }
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  position: static;
+  color: #fff;
+  /* margin-top: 20px; */
+}
+.mapContainer > div {
+  margin: 0 0 1em 0;
+}
+.btnCont {
+  display: flex;
+  justify-content: center;
+}
+.tripInfoCont {
+  height: 18vh;
+  width: 25vw;
+  display: flex;
+  background: "white";
+  z-index: 1000;
+  flex-direction: column;
+}
+
+.tripInfoCont > header {
+  margin: 0.5em auto;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  margin-left: 2em;
+}
+
+.tripInfoCont > div {
+  margin: 1em auto;
+  margin-left: 2.5em;
+  font-size: small;
+}
+
+.tripInfoCont > div:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 15vw;
+}

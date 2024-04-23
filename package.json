@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.15",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "@react-google-maps/api": "^2.19.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",
+    "daisyui": "^4.10.2",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3"
   }
