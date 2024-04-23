@@ -15,7 +15,7 @@ const Map = ({ paths, stops }) => {
   const [tripStart, setTripStart] = useState(false);
   const [dist, setDist] = useState(0);
   const [time, setTime] = useState(0);
-  const [nextStop, setNextStop] = useState("Kimironko");
+  const [nextStop, setNextStop] = useState("Bus Stop 1");
 
   const velocity = 100; // 360 km per hr (fast to speed up simulation)
   let initialDate;
@@ -45,12 +45,18 @@ const Map = ({ paths, stops }) => {
   }, [paths]);
 
   useEffect(() => {
-    setDist(
-      window.google.maps.geometry.spherical.computeDistanceBetween(
-        stops.data[0],
-        stops.data[1]
-      )
+    setTimeout(
+      () =>
+        setDist(
+          window.google.maps.geometry.spherical.computeDistanceBetween(
+            stops.data[0],
+            stops.data[1]
+          )
+        ),
+      2000
     );
+
+    setTime(dist / velocity);
   }, []);
 
   const moveObject = () => {
@@ -105,6 +111,22 @@ const Map = ({ paths, stops }) => {
       percentage
     );
 
+    setDist(totalDistance);
+
+    console.log("....nextLineLatLng", nextLine);
+
+    console.log(
+      "Getting.....",
+      paths.filter((p) => p.lat === nextLine.lat && p.lng === nextLine.lng)
+    );
+
+    setNextStop(
+      paths.filter((p) => p.lat === nextLine.lat && p.lng === nextLine.lng)[0]
+        .name
+    );
+
+    setTime(totalDistance / velocity);
+
     mapUpdate();
     setProgress(progress.concat(position));
   };
@@ -112,7 +134,7 @@ const Map = ({ paths, stops }) => {
   const calculatePath = () => {
     paths = paths.map((coordinates, i, array) => {
       if (i === 0) {
-        return { ...coordinates, distance: 0 }; // it begins here!
+        return { ...coordinates, distance: 0 }; // it begins here
       }
       const { lat: lat1, lng: lng1 } = coordinates;
       const latLong1 = new window.google.maps.LatLng(lat1, lng1);
@@ -227,7 +249,7 @@ const Map = ({ paths, stops }) => {
             </div>
             <div>
               <div>Distance: {(dist / 1000).toFixed(2)} km</div>
-              <div>Time: {time}</div>
+              <div>Time: {time.toFixed(2)} s</div>
             </div>
           </div>
 
