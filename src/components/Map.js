@@ -3,7 +3,6 @@ import WrappedMap from "./gMap/Map";
 import config from "./gMap/config";
 import Header from "./Header/Header";
 import Box from "@mui/material/Box";
-import LinearProgress from "@mui/material/LinearProgress";
 import paths from "../mocks/paths.json";
 import stops from "../mocks/stops";
 

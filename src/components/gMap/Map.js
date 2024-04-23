@@ -6,8 +6,6 @@ import {
   Marker,
   Polyline,
 } from "react-google-maps";
-import { MarkerF } from "@react-google-maps/api";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import "../../index.css";
 import { toast } from "react-toastify";
@@ -15,6 +13,9 @@ import { toast } from "react-toastify";
 const Map = ({ paths, stops }) => {
   const [progress, setProgress] = useState(null);
   const [tripStart, setTripStart] = useState(false);
+  const [dist, setDist] = useState(0);
+  const [time, setTime] = useState(0);
+  const [nextStop, setNextStop] = useState("Kimironko");
 
   const velocity = 100; // 360 km per hr (fast to speed up simulation)
   let initialDate;
@@ -24,26 +25,33 @@ const Map = ({ paths, stops }) => {
     url: "https://img.icons8.com/external-icongeek26-glyph-icongeek26/64/FAB005/external-bus-transportation-icongeek26-glyph-icongeek26-1.png",
     scaledSize: new window.google.maps.Size(40, 40),
     anchor: new window.google.maps.Point(20, 20),
-    scale: 0.5,
+    scale: 0.2,
   };
 
   const center = parseInt(paths.length / 2);
   const centerPathLat = paths[center].lat;
   const centerpathLng = paths[center].lng;
 
-  useEffect(() => {
-    calculatePath();
-
-    return () => {
-      interval && window.clearInterval(interval);
-    };
-  }, [paths]);
-
   const getDistance = () => {
     // seconds between when the component loaded and now
     const differentInTime = (new Date() - initialDate) / 1000; // pass to seconds
     return differentInTime * velocity;
   };
+
+  useEffect(() => {
+    calculatePath();
+
+    return () => interval && window.clearInterval(interval);
+  }, [paths]);
+
+  useEffect(() => {
+    setDist(
+      window.google.maps.geometry.spherical.computeDistanceBetween(
+        stops.data[0],
+        stops.data[1]
+      )
+    );
+  }, []);
 
   const moveObject = () => {
     const distance = getDistance();
@@ -69,7 +77,6 @@ const Map = ({ paths, stops }) => {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
         theme: "light",
         transition: "bounce",
       });
@@ -178,7 +185,6 @@ const Map = ({ paths, stops }) => {
 
   return (
     <Card className="bg-gray-900">
-      {/* <div className="flex items-center justify-center bg-gray-900"> */}
       <button
         onClick={startSimulation}
         className="bg-[#C0C781] w-full hover:bg-[#cbd288] text-gray-800 flex justify-center items-center font-bold py-2 px-4 rounded"
@@ -207,7 +213,6 @@ const Map = ({ paths, stops }) => {
         </svg>
         <span className="ml-4">{tripStart ? `Restart` : `Start`} Trip</span>
       </button>
-      {/* </div> */}
 
       <div className="gMapCont">
         <GoogleMap
@@ -216,12 +221,16 @@ const Map = ({ paths, stops }) => {
         >
           <div className="tripInfoCont">
             <header>Nyabugogo - Kimironko</header>
-            <div>Next Stop: </div>
             <div>
-              <div>Distance: </div>
-              <div>Time: </div>
+              <div>Next Stop: {nextStop}</div>
+              <div>Velocity: {velocity * 3.6} km/h</div>
+            </div>
+            <div>
+              <div>Distance: {(dist / 1000).toFixed(2)} km</div>
+              <div>Time: {time}</div>
             </div>
           </div>
+
           <Polyline
             path={paths}
             options={{
@@ -240,7 +249,7 @@ const Map = ({ paths, stops }) => {
                 lng: stop.lng,
               }}
               title={stop.id}
-              label={`${index + 1}`}
+              label={index === 0 ? "Ny" : "Ki"}
             />
           ))}
 

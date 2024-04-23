@@ -37,14 +37,12 @@
 }
 
 .tripInfoCont > div {
-  margin: 1em auto;
+  margin: 0.5em auto;
   margin-left: 2.5em;
   font-size: small;
-}
 
-.tripInfoCont > div:last-child {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 15vw;
+  width: 20vw;
 }
