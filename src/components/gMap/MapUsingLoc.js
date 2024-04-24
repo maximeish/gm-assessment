@@ -10,12 +10,13 @@ import Card from "@mui/material/Card";
 import "../../index.css";
 import { toast } from "react-toastify";
 
-const Map = ({ paths, stops }) => {
+const MapUsingLoc = ({ paths, stops }) => {
   const [progress, setProgress] = useState(null);
   const [tripStart, setTripStart] = useState(false);
   const [dist, setDist] = useState(0);
   const [time, setTime] = useState(0);
   const [nextStop, setNextStop] = useState("Bus Stop 1");
+  const [currentPos, setCurrentPos] = useState({ lat: "", lng: "" });
 
   const velocity = 100; // 360 km per hr (fast to speed up simulation)
   let initialDate;
@@ -28,9 +29,41 @@ const Map = ({ paths, stops }) => {
     scale: 0.2,
   };
 
+  const icon2 = {
+    url: "https://iili.io/JS4DANf.png",
+    scaledSize: new window.google.maps.Size(40, 40),
+    anchor: new window.google.maps.Point(20, 20),
+    scale: 0.5,
+  };
+
   const center = parseInt(paths.length / 2);
   const centerPathLat = paths[center].lat;
   const centerpathLng = paths[center].lng;
+
+  const locFound = (pos) => {
+    setCurrentPos({
+      lat: pos.coords.latitude,
+      lng: pos.coords.longitude,
+    });
+    const location = new window.google.maps.LatLng(
+      pos.coords.latitude,
+      pos.coords.longitude
+    );
+  };
+
+  const locNotFound = () =>
+    toast.error("🚌 Unable to get current location. Please, try again", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "light",
+      transition: "bounce",
+    });
+
+  navigator.geolocation.getCurrentPosition(locFound, locNotFound);
 
   const getDistance = () => {
     // seconds between when the component loaded and now
@@ -128,11 +161,18 @@ const Map = ({ paths, stops }) => {
   };
 
   const calculatePath = () => {
-    paths = paths.map((coordinates, i, array) => {
+    paths = paths.map(async (coordinates, i, array) => {
       if (i === 0) {
         return { ...coordinates, distance: 0 }; // it begins here
       }
-      const { lat: lat1, lng: lng1 } = coordinates;
+      let lat1, lng1;
+
+      navigator.geolocation.getCurrentPosition((pos) => {
+        console.log("got pos in await", pos);
+        lat1 = pos.coords.latitude;
+        lng1 = pos.coords.longitude;
+      }, locNotFound);
+
       const latLong1 = new window.google.maps.LatLng(lat1, lng1);
 
       const { lat: lat2, lng: lng2 } = array[0];
@@ -259,6 +299,18 @@ const Map = ({ paths, stops }) => {
             }}
           />
 
+          {
+            <Marker
+              key="currentPosition"
+              position={{
+                lat: currentPos.lat,
+                lng: currentPos.lng,
+              }}
+              icon={icon2}
+              title="current loc"
+            />
+          }
+
           {stops.data.map((stop, index) => (
             <Marker
               key={index}
@@ -298,4 +350,4 @@ const Map = ({ paths, stops }) => {
   );
 };
 
-export default withScriptjs(withGoogleMap(Map));
+export default withScriptjs(withGoogleMap(MapUsingLoc));

@@ -9,7 +9,6 @@ const App = () => {
     <div className="h-screen flex justify-center items-center bg-gray-900 flex-col">
       <Map />
       <Navigation />
-      <ToastContainer />
     </div>
   );
 };

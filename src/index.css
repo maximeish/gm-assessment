@@ -46,3 +46,12 @@
   justify-content: space-between;
   width: 20vw;
 }
+
+@media (max-width: 768px) {
+  .tripInfoCont {
+    width: 100vw;
+  }
+  .tripInfoCont > div {
+    width: 80vw;
+  }
+}
