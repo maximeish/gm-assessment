@@ -41,14 +41,12 @@ const MapUsingLoc = ({ paths, stops }) => {
   const centerpathLng = paths[center].lng;
 
   const locFound = (pos) => {
-    setCurrentPos({
-      lat: pos.coords.latitude,
-      lng: pos.coords.longitude,
-    });
     const location = new window.google.maps.LatLng(
       pos.coords.latitude,
       pos.coords.longitude
     );
+
+    return location;
   };
 
   const locNotFound = () =>
@@ -63,10 +61,16 @@ const MapUsingLoc = ({ paths, stops }) => {
       transition: "bounce",
     });
 
-  navigator.geolocation.getCurrentPosition(locFound, locNotFound);
+  navigator.geolocation.getCurrentPosition((pos) => {
+    setCurrentPos({
+      lat: pos.coords.latitude,
+      lng: pos.coords.longitude,
+    });
+    locFound(pos);
+  }, locNotFound);
 
   const getDistance = () => {
-    // seconds between when the component loaded and now
+    // seconds between now and when the component loaded
     const differentInTime = (new Date() - initialDate) / 1000; // in seconds
     return differentInTime * velocity;
   };
@@ -118,7 +122,6 @@ const MapUsingLoc = ({ paths, stops }) => {
         theme: "light",
         transition: "bounce",
       });
-      setTripStart(false);
       setNextStop("");
       setDist(0);
       setTime(0);
@@ -127,8 +130,8 @@ const MapUsingLoc = ({ paths, stops }) => {
     const lastLine = progress[progress.length - 1];
 
     const lastLineLatLng = new window.google.maps.LatLng(
-      lastLine.lat,
-      lastLine.lng
+      currentPos.lat,
+      currentPos.lng
     );
 
     const nextLineLatLng = new window.google.maps.LatLng(
@@ -168,7 +171,6 @@ const MapUsingLoc = ({ paths, stops }) => {
       let lat1, lng1;
 
       navigator.geolocation.getCurrentPosition((pos) => {
-        console.log("got pos in await", pos);
         lat1 = pos.coords.latitude;
         lng1 = pos.coords.longitude;
       }, locNotFound);
@@ -179,11 +181,13 @@ const MapUsingLoc = ({ paths, stops }) => {
       const latLong2 = new window.google.maps.LatLng(lat2, lng2);
 
       // meters:
-      const distance =
-        window.google.maps.geometry.spherical.computeDistanceBetween(
+      let distance;
+      setTimeout(() => {
+        distance = window.google.maps.geometry.spherical.computeDistanceBetween(
           latLong1,
           latLong2
         );
+      }, 2000);
 
       return { ...coordinates, distance };
     });
@@ -236,7 +240,6 @@ const MapUsingLoc = ({ paths, stops }) => {
     const marker = document.querySelector(`[src="${icon1.url}"]`);
 
     if (marker) {
-      // when it hasn't loaded, it's null
       marker.style.transform = `rotate(${actualAngle}deg)`;
     }
   };
