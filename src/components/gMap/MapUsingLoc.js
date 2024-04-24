@@ -112,19 +112,7 @@ const MapUsingLoc = ({ paths, stops }) => {
     if (!nextLine) {
       setProgress(progress);
       window.clearInterval(interval);
-      toast.success("🚌 Trip complete", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "light",
-        transition: "bounce",
-      });
-      setNextStop("");
-      setDist(0);
-      setTime(0);
+      setNextStop("Nyabugogo Car Park");
       return;
     }
     const lastLine = progress[progress.length - 1];
