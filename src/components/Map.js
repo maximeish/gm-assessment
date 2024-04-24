@@ -24,7 +24,7 @@ function Map() {
   const [l, setL] = useState(true);
   setTimeout(() => {
     setL(false);
-  }, 2500);
+  }, 3000);
 
   return (
     <div className="w-full lg:w-[25vw]">
