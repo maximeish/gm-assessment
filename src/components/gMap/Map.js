@@ -240,12 +240,20 @@ const Map = ({ paths, stops }) => {
           <div className="tripInfoCont">
             <header>Nyabugogo - Kimironko</header>
             <div>
-              <div>Next Stop: {nextStop}</div>
-              <div>Constant Velocity: {velocity * 3.6} km/h</div>
+              <div>
+                Next Stop: <strong>{nextStop}</strong>
+              </div>
+              <div>
+                Constant Velocity: <strong>{velocity * 3.6} km/h</strong>
+              </div>
             </div>
             <div>
-              <div>Distance: {(dist / 1000).toFixed(2)} km</div>
-              <div>Time: {time.toFixed(2)} s</div>
+              <div>
+                Distance: <strong>{(dist / 1000).toFixed(2)} km</strong>
+              </div>
+              <div>
+                Time: <strong>{time.toFixed(2)} s</strong>
+              </div>
             </div>
           </div>
 
