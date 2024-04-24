@@ -67,7 +67,7 @@ const MapUsingLoc = ({ paths, stops }) => {
 
   const getDistance = () => {
     // seconds between when the component loaded and now
-    const differentInTime = (new Date() - initialDate) / 1000; // pass to seconds
+    const differentInTime = (new Date() - initialDate) / 1000; // in seconds
     return differentInTime * velocity;
   };
 
@@ -163,7 +163,7 @@ const MapUsingLoc = ({ paths, stops }) => {
   const calculatePath = () => {
     paths = paths.map(async (coordinates, i, array) => {
       if (i === 0) {
-        return { ...coordinates, distance: 0 }; // it begins here
+        return { ...coordinates, distance: 0 }; // trip start
       }
       let lat1, lng1;
 
@@ -178,7 +178,7 @@ const MapUsingLoc = ({ paths, stops }) => {
       const { lat: lat2, lng: lng2 } = array[0];
       const latLong2 = new window.google.maps.LatLng(lat2, lng2);
 
-      // in meters:
+      // meters:
       const distance =
         window.google.maps.geometry.spherical.computeDistanceBetween(
           latLong1,
@@ -219,7 +219,7 @@ const MapUsingLoc = ({ paths, stops }) => {
       pt1 = progress[progress.length - 1];
       pt2 = nextLine;
     } else {
-      // it's the end, so use the latest 2
+      // as it is ending, we use the latest 2 points
       pt1 = progress[progress.length - 2];
       pt2 = progress[progress.length - 1];
     }
